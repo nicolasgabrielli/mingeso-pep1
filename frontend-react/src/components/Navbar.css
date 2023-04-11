@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'Creamy Sugar';
+    src: url('./CreamySugar-gxnGR.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.navbar-title {
+    color:white;
+    font-family: 'Creamy Sugar';
+    font-size: 2.5em;
+}
