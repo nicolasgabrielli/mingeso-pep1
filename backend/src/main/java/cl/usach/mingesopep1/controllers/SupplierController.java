@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import cl.usach.mingesopep1.repositories.SupplierRepository;
@@ -39,15 +40,14 @@ public class SupplierController {
         return new ResponseEntity<>(supplier, HttpStatus.OK);
     }
 
-    @PostMapping("/suppliers")
-    public ResponseEntity<SupplierEntity> createSupplier(SupplierEntity supplier) {
+    @PostMapping("/suppliers/create")
+    public ResponseEntity<SupplierEntity> createSupplier(@RequestBody SupplierEntity supplier) {
         try {
-            SupplierEntity new_supplier = supplierRepository.save(new SupplierEntity(supplier.getId(), supplier.getCode(), supplier.getName(), supplier.getCategory(), supplier.getRetention()));
+            SupplierEntity new_supplier = supplierRepository.save(new SupplierEntity(supplier.getId(), supplier.getName(), supplier.getCode(), supplier.getCategory(), supplier.getRetention()));
             return new ResponseEntity<>(new_supplier, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     
 }

@@ -13,7 +13,7 @@ function Home() {
                     <Row>
                         <Col>
                             <Button variant="dark" href="/suppliers">
-                                Listar Datos de los Proveedores
+                                Acceso Datos Proveedores
                             </Button>
                         </Col>
 

@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { Button, Container, Row, Col } from "react-bootstrap";
-import NavbarCustom from "../components/Navbar";
+import { Button, Row } from "react-bootstrap";
 import Table from 'react-bootstrap/Table';
 
 class Suppliers extends Component {
@@ -15,7 +13,9 @@ class Suppliers extends Component {
     async componentDidMount() {
         const response = await fetch("/suppliers");
         const body = await response.json();
+        console.log(body);
         this.setState({ suppliers: body });
+        
     }
 
     render() {
@@ -23,6 +23,7 @@ class Suppliers extends Component {
         return (
             <div className="App">
                 <header className="App-header">
+
                     <Table striped bordered hover>
                         <thead>
                             <tr>
@@ -34,7 +35,7 @@ class Suppliers extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {suppliers.map(supplier => 
+                            {suppliers.map(supplier =>
                                 <tr key={supplier.id}>
                                     <td>{supplier.id}</td>
                                     <td>{supplier.name}</td>
@@ -45,6 +46,7 @@ class Suppliers extends Component {
                             )}
                         </tbody>
                     </Table>
+                    <Button href="/suppliers/create">Ingresar Proveedor</Button>
                 </header>
             </div>
         );

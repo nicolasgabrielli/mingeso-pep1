@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  app:
+    container_name: spring-boot-docker
+    image: nicolasgabrielli/mingeso-pep1:api
+    ports:
+      - "8090:8090"
+    depends_on:
+      - db
+    deploy:
+      restart_policy:
+        condition: on-failure
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgresql
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
+  db:
+    image: postgres:15.1-alpine
+    container_name: db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgresql
+  front-end:
+    container_name: front-end-docker
+    image: nicolasgabrielli/mingeso-pep1:front-end
+    ports:
+      - "3000:3000"
+    depends_on:
+      - app
+    deploy:
+      restart_policy:
+        condition: on-failure

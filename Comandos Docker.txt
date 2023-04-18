@@ -1,0 +1,18 @@
+Pasos: 
+
+1) Logueo con Dockerhub:
+
+docker login
+
+2) Creación de la imágen:
+
+docker build -t nicolasgabrielli/mingeso-pep1 .
+
+docker push nicolasgabrielli/mingeso-pep1
+
+** Comando para ver imagenes creadas:
+docker image ls
+
+** Eliminar imagen:
+docker rmi <nombre imagen>
+
