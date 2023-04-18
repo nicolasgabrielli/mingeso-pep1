@@ -15,6 +15,11 @@
 	<description>PEP 1 Mingeso</description>
 	<properties>
 		<java.version>17</java.version>
+		<sonar.exclusions>
+			src/main/java/cl/usach/mingesopep1/controllers/*,
+			src/main/java/cl/usach/mingesopep1/entities/*,
+			src/main/java/cl/usach/mingesopep1/repositories/*
+		</sonar.exclusions>
 	</properties>
 	<dependencies>
 		<dependency>
