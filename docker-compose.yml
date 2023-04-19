@@ -23,8 +23,6 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgresql
-    volumes:
-      - ./data/db:/var/lib/postgresql/data
   front-end:
     container_name: front-end-docker
     image: nicolasgabrielli/mingeso-pep1:front-end

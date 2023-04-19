@@ -1,0 +1,5 @@
+* Se cambió el puerto a 8081 *
+java -jar jenkins.war --httpPort=8081
+
+* Credenciales de Jenkins *
+Todo es admin1 menos el correo: nicolas.gabrielli@usach.cl
