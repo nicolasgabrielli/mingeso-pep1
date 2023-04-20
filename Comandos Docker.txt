@@ -16,3 +16,6 @@ docker image ls
 ** Eliminar imagen:
 docker rmi <nombre imagen>
 
+** Eliminar Contenedores, Imágenes, Volúmenes y Redes:
+docker system prune -a
+

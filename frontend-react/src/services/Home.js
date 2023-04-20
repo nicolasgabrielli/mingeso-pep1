@@ -1,7 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { Button, Container, Row, Col } from "react-bootstrap";
-import NavbarCustom from "../components/Navbar";
 
 
 function Home() {
@@ -19,7 +17,7 @@ function Home() {
 
                         <Col>
                             <Button variant="dark">
-                                Ingresar Productos
+                                Ingresar Productos bruh
                             </Button>
                         </Col>
                     </Row>

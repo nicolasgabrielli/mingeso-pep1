@@ -1,7 +1,7 @@
 {
   "name": "frontend-react",
   "version": "0.1.0",
-  "proxy": "http://spring-boot-docker:8090/api",
+  "proxy": "http://spring-boot-docker/api",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
@@ -10,7 +10,7 @@
     "axios": "^1.3.5",
     "bootstrap": "^5.2.3",
     "react": "^18.2.0",
-    "react-bootstrap": "^2.7.2",
+    "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
