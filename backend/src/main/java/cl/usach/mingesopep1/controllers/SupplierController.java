@@ -42,7 +42,7 @@ public class SupplierController {
             @RequestParam("retention") String retention) {
 
         supplierService.createSupplier(name, code, category, retention);
-        return "redirect:/suppliers/create";
+        return "redirect:/suppliers";
     }
     
 }
