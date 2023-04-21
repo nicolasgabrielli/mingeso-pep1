@@ -51,14 +51,6 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgresql
-  front-end:
-    container_name: front-end-docker
-    image: nicolasgabrielli/mingeso-pep1:front-end
-    ports:
-      - "3000:3000"
-    deploy:
-      restart_policy:
-        condition: on-failure
   nginx:
     image: nginx:latest
     container_name: nginx-proxy

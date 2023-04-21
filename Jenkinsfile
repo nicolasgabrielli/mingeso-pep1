@@ -30,23 +30,6 @@ pipeline{
                 }
             }
         }
-        stage("Build Frontend Image"){
-            steps {
-                dir("frontend-react"){
-                    sh "docker build -t nicolasgabrielli/mingeso-pep1:front-end ."
-                }
-            }
-        }
-        stage("Push Frontend Image"){
-            steps {
-                dir("frontend-react"){
-                    withCredentials([string(credentialsId: "dckrhubpassword", variable: "dckpass")]) {
-                        sh "docker login -u nicolasgabrielli -p $dckpass"
-                    }
-                    sh "docker push nicolasgabrielli/mingeso-pep1:front-end"
-                }
-            }
-        }
         stage("Test Backend"){
             steps {
                 dir("backend"){
@@ -66,10 +49,6 @@ pipeline{
         always {
             dir("backend"){
                 sh "docker logout"
-            }
-            dir("frontend-react"){
-                sh "docker logout"    
-            }
         }
     }
 }

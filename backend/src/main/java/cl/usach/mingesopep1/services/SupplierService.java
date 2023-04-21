@@ -19,8 +19,13 @@ public class SupplierService {
         return supplierRepository.findById(id).orElse(null);
     }
 
-    public SupplierEntity createSupplier(SupplierEntity supplier) {
-        return supplierRepository.save(new SupplierEntity(supplier.getId(), supplier.getName(), supplier.getCode(), supplier.getCategory(), supplier.getRetention()));
+    public void createSupplier(String name, String code, String category, String retention) {
+        SupplierEntity supplier = new SupplierEntity();
+        supplier.setName(name);
+        supplier.setCode(code);
+        supplier.setCategory(category);
+        supplier.setRetention(retention);
+        supplierRepository.save(supplier);
     }
 
 }
