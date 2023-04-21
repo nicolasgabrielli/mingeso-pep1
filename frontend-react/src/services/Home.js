@@ -17,7 +17,7 @@ function Home() {
 
                         <Col>
                             <Button variant="dark">
-                                Ingresar Productos bruh
+                                Ingresar Productos
                             </Button>
                         </Col>
                     </Row>
