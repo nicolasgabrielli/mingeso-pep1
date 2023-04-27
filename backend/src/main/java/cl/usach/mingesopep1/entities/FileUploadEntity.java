@@ -25,4 +25,5 @@ public class FileUploadEntity {
     private String kgs_milk;
     private String fat;
     private String total_solids;
+
 }

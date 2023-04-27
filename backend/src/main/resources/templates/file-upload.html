@@ -42,17 +42,18 @@
     </nav>
 
 
-    <form action="/upload" method="post" enctype="multipart/form-data">
+    <form th:action="@{/file-upload}" method="POST" enctype="multipart/form-data">
         <div class="container box-center justify-content-center align-items-center d-flex">
             <div class="p-2 flex-fill bd-highlight">
                 <div class="mb-3">
                     <label for="formFile" class="form-label">Archivo de acopio</label>
-                    <input class="form-control" type="file" id="formFile">
+                    <input class="form-control" type="file" id="file" name="file" accept=".csv">
                 </div>
             <button type="submit" class="btn btn-primary btn-dark">Subir</button>
             </div>
         </div>
     </form>
+    <u><b><h2 th:text="${mensaje}"></h2></b></u>
 
 
 </body>
