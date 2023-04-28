@@ -3,6 +3,7 @@ package cl.usach.mingesopep1.services;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -72,10 +73,10 @@ public class FileUploadService {
         } finally {
             System.out.println("Lectura de archivo finalizada.");
         }
-
     }
 
-
-
+    public List<FileUploadEntity> getAllFiles() {
+        return fileUploadRepository.findAll();
+    }
     
 }
