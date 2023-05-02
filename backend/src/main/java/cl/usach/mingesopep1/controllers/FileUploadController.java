@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.ui.Model;
 import cl.usach.mingesopep1.entities.FileUploadEntity;
+import cl.usach.mingesopep1.entities.FileUploadEntityType2;
 import cl.usach.mingesopep1.services.FileUploadService;
 
 @Controller
@@ -39,7 +40,9 @@ public class FileUploadController {
     @GetMapping("/file-info")
     public String fileInfo(Model model) {
         List<FileUploadEntity> files = fileUploadService.getAllFiles();
+        List<FileUploadEntityType2> files2 = fileUploadService.getAllFilesType2();
         model.addAttribute("files", files);
+        model.addAttribute("files2", files2);
         return "file-info";
     }
 }

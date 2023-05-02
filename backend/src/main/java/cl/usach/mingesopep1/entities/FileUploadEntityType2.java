@@ -9,19 +9,18 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
+
 @Entity
-@Table(name = "file_upload")
+@Table(name = "file_upload_type_2")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class FileUploadEntity {
+public class FileUploadEntityType2 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    private String date;
-    private String shift;
+    
     private String supplier;
-    private String kgs_milk;
-
+    private String fat;
+    private String total_solids;
 }

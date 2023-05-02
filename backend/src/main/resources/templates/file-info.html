@@ -48,8 +48,6 @@
                 <th scope="col">Turno</th>
                 <th scope="col">Proveedor</th>
                 <th scope="col">Kls de Leche</th>
-                <th scope="col">Grasa</th>
-                <th scope="col">Sólidos Totales</th>
             </tr>
         </thead>
         <tbody>
@@ -58,8 +56,22 @@
                 <td th:text="${files.shift}"></td>
                 <td th:text="${files.supplier}"></td>
                 <td th:text="${files.kgs_milk}"></td>
-                <td th:text="${files.fat}"></td>
-                <td th:text="${files.total_solids}"></td>
+                </tr>
+        </tbody>
+    </table>
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Proveedor</th>
+                <th scope="col">Grasa</th>
+                <th scope="col">Sólidos Totales</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="files2:${files2}">
+                <td th:text="${files2.supplier}"></td>
+                <td th:text="${files2.fat}"></td>
+                <td th:text="${files2.total_solids}"></td>
                 </tr>
         </tbody>
     </table>
