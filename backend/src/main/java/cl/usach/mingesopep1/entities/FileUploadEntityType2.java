@@ -21,6 +21,6 @@ public class FileUploadEntityType2 {
     private Long id;
     
     private String supplier;
-    private String fat;
-    private String total_solids;
+    private float fat;
+    private float total_solids;
 }

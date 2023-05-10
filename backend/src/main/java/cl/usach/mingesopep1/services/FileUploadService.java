@@ -80,15 +80,15 @@ public class FileUploadService {
                     fileUploadEntity.setDate(data[0]);
                     fileUploadEntity.setShift(data[1]);
                     fileUploadEntity.setSupplier(data[2]);
-                    fileUploadEntity.setKgs_milk(data[3]);
+                    fileUploadEntity.setKgs_milk(Integer.parseInt(data[3]));
                     fileUploadRepository.save(fileUploadEntity);
                 }
                 else if(firstLine != 1 && format == 2){
                     String[] data = line.split(csvSplit);
                     FileUploadEntityType2 fileUploadEntityType2 = new FileUploadEntityType2();
                     fileUploadEntityType2.setSupplier(data[0]);
-                    fileUploadEntityType2.setFat(data[1]);
-                    fileUploadEntityType2.setTotal_solids(data[2]);
+                    fileUploadEntityType2.setFat(Float.parseFloat(data[1]));
+                    fileUploadEntityType2.setTotal_solids(Float.parseFloat(data[2]));
                     fileUploadRepositoryType2.save(fileUploadEntityType2);
                 }
             }
