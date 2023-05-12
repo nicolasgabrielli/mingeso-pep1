@@ -81,10 +81,12 @@ public class SummaryService {
         
         summary.setShiftPayment(shiftPayment(summary, payment));
         summary.setDiscountKgsPayment(discountKgsPayment(summary, payment));
-        summary.setDiscountFatPayment(discountFatPayment());
-        summary.setDiscountTotalSolidsPayment(discountTotalSolidsPayment());
+        summary.setDiscountFatPayment(discountFatPayment(summary, payment));
+        summary.setDiscountTotalSolidsPayment(discountTotalSolidsPayment(summary, payment));
+        payment = sumVariations(summary.getShiftPayment(), summary.getDiscountKgsPayment(), 
+            summary.getDiscountFatPayment(), summary.getDiscountTotalSolidsPayment());
         summary.setDiscountRetention(discountRetention(payment));
-        summary.setTotalPayment(totalPayment());
+        summary.setTotalPayment(payment + summary.getDiscountRetention());
         return summary;
     }
 
@@ -158,6 +160,12 @@ public class SummaryService {
         return sumPayments;
     }
 
+    public float sumVariations(float shiftPayment, float discountKgsPayment, float discountFatPayment, float discountTotalSolidsPayment) {
+        float sumVariations = shiftPayment + discountKgsPayment + discountFatPayment + discountTotalSolidsPayment;
+
+        return sumVariations;
+    }
+
 
     public float shiftPayment(SummaryModel summary, float payment) {
         float shiftBonus = 1.0f;
@@ -201,27 +209,104 @@ public class SummaryService {
 
     public float discountKgsPayment(SummaryModel summary, float payment) {
         float variationKgsPayment = 0;
+        // Checking if there is more than one file uploaded
+        int last_file = summary.getFileUploads().size() - 1;
+        int penultimate_file = summary.getFileUploads().size() - 2;
 
-        return variationKgsPayment;
+        if (last_file < 1){
+            return variationKgsPayment;
+        }
+        else{
+            if (!summary.getFileUploads().get(last_file).getDate().equals(summary.getFileUploads().get(penultimate_file).getDate())){
+                float last_kgs_milk = summary.getFileUploads().get(last_file).getKgs_milk();
+                float penultimate_kgs_milk = summary.getFileUploads().get(penultimate_file).getKgs_milk();
+                if (last_kgs_milk > penultimate_kgs_milk){
+                    if (last_kgs_milk/penultimate_kgs_milk <= 1.08){
+                        variationKgsPayment = 0.0f;
+                    }
+                    else if (last_kgs_milk/penultimate_kgs_milk >= 1.09 && last_kgs_milk/penultimate_kgs_milk <= 1.25){
+                        variationKgsPayment = 0.07f;
+                    }
+                    else if (last_kgs_milk/penultimate_kgs_milk >= 1.26 && last_kgs_milk/penultimate_kgs_milk <= 1.45){
+                        variationKgsPayment = 0.15f;
+                    }
+                    else if (last_kgs_milk/penultimate_kgs_milk >= 1.46){
+                        variationKgsPayment = 0.3f;
+                    }
+                }
+            }
+        }
+        return payment * variationKgsPayment;
     }
 
-    public float discountFatPayment() {
+    public float discountFatPayment(SummaryModel summary, float payment) {
         float variationFatPayment = 0;
+        // Checking if there is more than one file uploaded
+        int last_file = summary.getFileUploadsType2().size() - 1;
+        int penultimate_file = summary.getFileUploadsType2().size() - 2;
 
+        if (last_file < 1){
+            return variationFatPayment;
+        }
+        else{
+            float last_fat_data = summary.getFileUploadsType2().get(last_file).getFat();
+            float penultimate_fat_data = summary.getFileUploadsType2().get(penultimate_file).getFat();
+            if (last_fat_data > penultimate_fat_data){
+                if (last_fat_data/penultimate_fat_data <= 1.15){
+                    variationFatPayment = 0.0f;
+                }
+                else if (last_fat_data/penultimate_fat_data >= 1.16 && last_fat_data/penultimate_fat_data <= 1.25){
+                    variationFatPayment = 0.12f;
+                }
+                else if (last_fat_data/penultimate_fat_data >= 1.26 && last_fat_data/penultimate_fat_data <= 1.40){
+                    variationFatPayment = 0.2f;
+                }
+                else if (last_fat_data/penultimate_fat_data >= 1.41){
+                    variationFatPayment = 0.3f;
+                }
+            }
+        }
         return variationFatPayment;
     }
 
-    public float discountTotalSolidsPayment() {
+    public float discountTotalSolidsPayment(SummaryModel summary, float payment) {
         float variationTotalSolidsPayment = 0;
+        // Checking if there is more than one file uploaded
+        int last_file = summary.getFileUploadsType2().size() - 1;
+        int penultimate_file = summary.getFileUploadsType2().size() - 2;
 
+        if (last_file < 1){
+            return variationTotalSolidsPayment;
+        }
+        else{
+            float last_total_solids_data = summary.getFileUploadsType2().get(last_file).getTotal_solids();
+            float penultimate_total_solids_data = summary.getFileUploadsType2().get(penultimate_file).getTotal_solids();
+            if (last_total_solids_data > penultimate_total_solids_data){
+                if (last_total_solids_data/penultimate_total_solids_data <= 1.06){
+                    variationTotalSolidsPayment = 0.0f;
+                }
+                else if (last_total_solids_data/penultimate_total_solids_data >= 1.07 && last_total_solids_data/penultimate_total_solids_data <= 1.12){
+                    variationTotalSolidsPayment = 0.18f;
+                }
+                else if (last_total_solids_data/penultimate_total_solids_data >= 1.13 && last_total_solids_data/penultimate_total_solids_data <= 1.35){
+                    variationTotalSolidsPayment = 0.27f;
+                }
+                else if (last_total_solids_data/penultimate_total_solids_data >= 1.36){
+                    variationTotalSolidsPayment = 0.45f;
+                }
+            }
+        }
         return variationTotalSolidsPayment;
     }
 
     public float discountRetention(float payment) {
-        return payment * retentionTaxes;
+        if (payment >= 950000){
+            return payment * retentionTaxes;    
+        }
+        return 0.0f;
     }
 
-    public float totalPayment() {
+    public float totalPayment(SummaryModel summary) {
         float totalPayment = 0;
 
         return totalPayment;
