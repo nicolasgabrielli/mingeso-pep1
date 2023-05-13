@@ -13,12 +13,14 @@ import cl.usach.mingesopep1.entities.FileUploadEntityType2;
 @AllArgsConstructor
 public class SummaryModel {
     // Data from database
-    private String supplierCode;
+    private int supplierCode;
     private String supplierCategory;
+    private String supplierName;
     private ArrayList<FileUploadEntity> fileUploads;
     private ArrayList<FileUploadEntityType2> fileUploadsType2;
 
     // Summary data
+    private float milkPayment;
     private float categoryPayment;
     private float fatPayment;
     private float totalSolidsPayment;
@@ -28,4 +30,11 @@ public class SummaryModel {
     private float discountTotalSolidsPayment;
     private float discountRetention;
     private float totalPayment;
+    private float finalPayment;
+
+    // Variations
+    private float milkVariation;
+    private float fatVariation;
+    private float totalSolidsVariation;
+
 }

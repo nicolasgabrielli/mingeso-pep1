@@ -20,7 +20,7 @@ public class SupplierEntity {
     private Long id;
 
     private String name;
-    private String code;
+    private int code;
     private String category;
     private String retention;
 }

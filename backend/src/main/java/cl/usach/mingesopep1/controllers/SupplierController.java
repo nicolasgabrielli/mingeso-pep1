@@ -35,7 +35,7 @@ public class SupplierController {
 
     @PostMapping("/suppliers/create")
     public String createSupplier(@RequestParam("name") String name, 
-            @RequestParam("code") String code, 
+            @RequestParam("code") int code, 
             @RequestParam("category") String category, 
             @RequestParam("retention") String retention) {
 

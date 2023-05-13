@@ -20,7 +20,7 @@ public class FileUploadEntityType2 {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    private String supplier;
+    private int supplier;
     private float fat;
     private float total_solids;
 }

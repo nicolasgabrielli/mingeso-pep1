@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>MilkStgo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #343a40;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .navbar-brand {
+            margin-left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 30px;
+        }
+
+        .box-center {
+            max-width: 1199.98px;
+            min-height: 800px;
+        }
+    </style>
+</head>
+
+
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">MilkStgo</span>
+            <a href="/file-upload" class="btn btn-primary btn-lg btn-block btn-dark" role="button" aria-pressed="true">
+                Volver a la subida de Archivos
+            </a>
+            <a href="/" class="btn btn-primary btn-lg btn-block btn-dark" role="button" aria-pressed="true">
+                Volver al menú principal
+            </a>
+        </div>
+    </nav>
+    
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Fecha</th>
+                <th scope="col">Código</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Kls de Leche</th>
+                <th scope="col">Nro. de días</th>
+                <th scope="col">Prom. Kls de Leche por día</th>
+                <th scope="col">% Var. Leche</th>
+                <th scope="col">% Grasa</th>
+                <th scope="col">% Var. Grasa</th>
+                <th scope="col">% Sólidos Totales</th>
+                <th scope="col">% Var. ST</th>
+                <th scope="col">Pago por Leche</th>
+                <th scope="col">Pago por Grasa</th>
+                <th scope="col">Pago por ST</th>
+                <th scope="col">Bonus por Frecuencia</th>
+                <th scope="col">Dcto. Var de Leche</th>
+                <th scope="col">Dcto. Var de Grasa</th>
+                <th scope="col">Dcto. Var de ST</th>
+                <th scope="col">Pago TOTAL</th>
+                <th scope="col">Monto Retención</th>
+                <th scope="col">Monto FINAL</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="summary:${summary}">
+                <td th:text="${summary.date}"></td>
+                <td th:text="${summary.code}"></td>
+                <td th:text="${summary.name}"></td>
+                <td th:text="${summary.kgsMilk}"></td>
+                <td th:text="${summary.days}"></td>
+                <td th:text="${summary.avgDailyMilk}"></td>
+                <td th:text="${summary.milkVariation}"></td>
+                <td th:text="${summary.fat}"></td>
+                <td th:text="${summary.fatVariation}"></td>
+                <td th:text="${summary.totalSolids}"></td>
+                <td th:text="${summary.totalSolidsVariation}"></td>
+                <td th:text="${summary.milkPayment}"></td>
+                <td th:text="${summary.fatPayment}"></td>
+                <td th:text="${summary.totalSolidsPayment}"></td>
+                <td th:text="${summary.frenquencyBonus}"></td>
+                <td th:text="${summary.milkVarDiscount}"></td>
+                <td th:text="${summary.fatVarDiscount}"></td>
+                <td th:text="${summary.stVarDiscount}"></td>
+                <td th:text="${summary.totalPayment}"></td>
+                <td th:text="${summary.retentionAmmount}"></td>
+                <td th:text="${summary.finalPayment}"></td>
+                </tr>
+        </tbody>
+    </table>
+    
+
+
+</body>

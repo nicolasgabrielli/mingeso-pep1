@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 
 import cl.usach.mingesopep1.entities.FileUploadEntity;
 import cl.usach.mingesopep1.entities.FileUploadEntityType2;
+import cl.usach.mingesopep1.entities.SummaryEntity;
 import cl.usach.mingesopep1.entities.SupplierEntity;
 import cl.usach.mingesopep1.models.SummaryModel;
+import cl.usach.mingesopep1.repositories.SummaryRepository;
 
 
 @Service
@@ -21,21 +23,31 @@ public class SummaryService {
     @Autowired
     private FileUploadService fileUploadService;
 
+    @Autowired
+    private SummaryRepository summaryRepository;
+
     // Taxes for payments > 950.000
     private float retentionTaxes = (float) 0.13; // 13%
 
-    public ArrayList<SummaryModel> createSummary() {
-        List<SupplierEntity> suppliers;
-        List<FileUploadEntity> fileUploads;
-        List<FileUploadEntityType2> fileUploadsType2;
+    public ArrayList<SummaryModel> createSummaryModels() {
+        List<SupplierEntity> suppliersData;
+        List<FileUploadEntity> fileUploadsData;
+        List<FileUploadEntityType2> fileUploadsType2Data;
         // Getting data from database
-        try {
-            suppliers = supplierService.getAllSuppliers();
-            fileUploads = fileUploadService.getAllFiles();
-            fileUploadsType2 = fileUploadService.getAllFilesType2();
-        } catch (Exception e){
-            throw new RuntimeException("No se pudo obtener la información de la base de datos. Error: " + e.getMessage());
+        suppliersData = supplierService.getAllSuppliers();
+        fileUploadsData = fileUploadService.getAllFiles();
+        fileUploadsType2Data = fileUploadService.getAllFilesType2();
+
+        // Transforming the data into arraylist
+        ArrayList<SupplierEntity> suppliers = new ArrayList<SupplierEntity>(suppliersData);
+        ArrayList<FileUploadEntity> fileUploads = new ArrayList<FileUploadEntity>(fileUploadsData);
+        ArrayList<FileUploadEntityType2> fileUploadsType2 = new ArrayList<FileUploadEntityType2>(fileUploadsType2Data);
+
+        if (suppliers == null || fileUploads == null || fileUploadsType2 == null) {
+            System.out.println("Error: No data in database");
+            return null;
         }
+
         ArrayList<SummaryModel> summaries = new ArrayList<SummaryModel>();
         SummaryModel summary;
         // Making a summary for each supplier
@@ -43,27 +55,31 @@ public class SummaryService {
             summary = new SummaryModel();
             summary.setSupplierCode(suppliers.get(i).getCode());
             summary.setSupplierCategory(suppliers.get(i).getCategory());
-
+            summary.setSupplierName(suppliers.get(i).getName());
+            summary.setFileUploads(new ArrayList<FileUploadEntity>());
+            summary.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
             for (int j = 0; j < fileUploads.size(); j++){
-                if(fileUploads.get(j).getSupplier().equals(suppliers.get(i).getCode())){
+                if(fileUploads.get(j).getSupplier() == suppliers.get(i).getCode()){
                     summary.getFileUploads().add(fileUploads.get(j));
                 }
             }
 
             for (int j = 0; j < fileUploadsType2.size(); j++){
-                if(fileUploadsType2.get(j).getSupplier().equals(suppliers.get(i).getCode())){
+                if(fileUploadsType2.get(j).getSupplier() == suppliers.get(i).getCode()){
                     summary.getFileUploadsType2().add(fileUploadsType2.get(j));
                 }
             }
             summaries.add(summary);
         }
+
         return summaries;
     }
 
-    public SummaryModel calculateSummary(SummaryModel summary) {
+    public SummaryModel calculateSummaryModel(SummaryModel summary) {
         
         int last_file = summary.getFileUploads().size() - 1;
         int last_file_type2 = summary.getFileUploadsType2().size() - 1;
+        
         // Getting the last row in the file table
         FileUploadEntity file = summary.getFileUploads().get(last_file);
         FileUploadEntityType2 file_type2 = summary.getFileUploadsType2().get(last_file_type2);
@@ -84,18 +100,66 @@ public class SummaryService {
         summary.setDiscountFatPayment(discountFatPayment(summary, payment));
         summary.setDiscountTotalSolidsPayment(discountTotalSolidsPayment(summary, payment));
         payment = sumVariations(summary.getShiftPayment(), summary.getDiscountKgsPayment(), 
-            summary.getDiscountFatPayment(), summary.getDiscountTotalSolidsPayment());
+            summary.getDiscountFatPayment(), summary.getDiscountTotalSolidsPayment()) + payment;
+        summary.setTotalPayment(payment);
         summary.setDiscountRetention(discountRetention(payment));
-        summary.setTotalPayment(payment + summary.getDiscountRetention());
+        summary.setFinalPayment(payment + summary.getDiscountRetention());
+
         return summary;
     }
 
     public ArrayList<SummaryModel> calculateSummaries(ArrayList<SummaryModel> summaries) {
         for (int i = 0; i < summaries.size(); i++){
-            summaries.set(i, calculateSummary(summaries.get(i)));
+            summaries.set(i, calculateSummaryModel(summaries.get(i)));
         }
         return summaries;
     }
+
+    public void makeSummary(){
+        ArrayList<SummaryModel> summaries = createSummaryModels();
+        summaries = calculateSummaries(summaries);
+        SummaryEntity summaryEntity;
+        int last_file, last_file_type2;
+        if(summaries.size() > 0){
+            summaryRepository.deleteAll();
+            for (int i = 0; i < summaries.size(); i++){
+                summaryEntity = new SummaryEntity();
+                last_file = summaries.get(i).getFileUploads().size() - 1;
+                last_file_type2 = summaries.get(i).getFileUploadsType2().size() - 1;
+                summaryEntity.setDate(summaries.get(i).getFileUploads().get(last_file).getDate());
+                summaryEntity.setCode(summaries.get(i).getSupplierCode());
+                summaryEntity.setName(summaries.get(i).getSupplierName());
+                summaryEntity.setKgsMilk(summaries.get(i).getFileUploads().get(last_file).getKgs_milk());
+                summaryEntity.setDays(calculateDays(summaries.get(i)));
+                summaryEntity.setAvgDailyMilk(calculateAvgDailyMilk(summaries.get(i)));
+                summaryEntity.setMilkVariation(summaries.get(i).getMilkVariation());
+                summaryEntity.setFat(summaries.get(i).getFileUploadsType2().get(last_file_type2).getFat());
+                summaryEntity.setFatVariation(summaries.get(i).getFatVariation());
+                summaryEntity.setTotalSolids(summaries.get(i).getFileUploadsType2().get(last_file_type2).getTotal_solids());
+                summaryEntity.setTotalSolidsVariation(summaries.get(i).getTotalSolidsVariation());
+                summaryEntity.setMilkPayment(summaries.get(i).getCategoryPayment());
+                summaryEntity.setFatPayment(summaries.get(i).getFatPayment());
+                summaryEntity.setTotalSolidsPayment(summaries.get(i).getTotalSolidsPayment());
+                summaryEntity.setFrenquencyBonus(summaries.get(i).getShiftPayment());
+                summaryEntity.setMilkVarDiscount(summaries.get(i).getDiscountKgsPayment());
+                summaryEntity.setFatVarDiscount(summaries.get(i).getDiscountFatPayment());
+                summaryEntity.setStVarDiscount(summaries.get(i).getDiscountTotalSolidsPayment());
+                summaryEntity.setTotalPayment(summaries.get(i).getTotalPayment());
+                summaryEntity.setRetentionAmmount(summaries.get(i).getDiscountRetention());
+                summaryEntity.setFinalPayment(summaries.get(i).getFinalPayment());
+                summaryRepository.save(summaryEntity);
+            }
+        }
+        else{
+            System.out.println("No hay datos para generar resumen");
+        }
+    }
+
+    public ArrayList<SummaryEntity> getSummaries(){
+        return (ArrayList<SummaryEntity>) summaryRepository.findAll();
+    }
+
+    // Payment Methods
 
     public float categoryPayment(int kgs_milk, String category) {
         float categoryPayment;
@@ -160,13 +224,6 @@ public class SummaryService {
         return sumPayments;
     }
 
-    public float sumVariations(float shiftPayment, float discountKgsPayment, float discountFatPayment, float discountTotalSolidsPayment) {
-        float sumVariations = shiftPayment + discountKgsPayment + discountFatPayment + discountTotalSolidsPayment;
-
-        return sumVariations;
-    }
-
-
     public float shiftPayment(SummaryModel summary, float payment) {
         float shiftBonus = 1.0f;
         // Checking if there is more than one file uploaded
@@ -220,6 +277,7 @@ public class SummaryService {
             if (!summary.getFileUploads().get(last_file).getDate().equals(summary.getFileUploads().get(penultimate_file).getDate())){
                 float last_kgs_milk = summary.getFileUploads().get(last_file).getKgs_milk();
                 float penultimate_kgs_milk = summary.getFileUploads().get(penultimate_file).getKgs_milk();
+                summary.setMilkVariation(last_kgs_milk/penultimate_kgs_milk - 1);
                 if (last_kgs_milk > penultimate_kgs_milk){
                     if (last_kgs_milk/penultimate_kgs_milk <= 1.08){
                         variationKgsPayment = 0.0f;
@@ -236,7 +294,7 @@ public class SummaryService {
                 }
             }
         }
-        return payment * variationKgsPayment;
+        return variationKgsPayment;
     }
 
     public float discountFatPayment(SummaryModel summary, float payment) {
@@ -251,6 +309,7 @@ public class SummaryService {
         else{
             float last_fat_data = summary.getFileUploadsType2().get(last_file).getFat();
             float penultimate_fat_data = summary.getFileUploadsType2().get(penultimate_file).getFat();
+            summary.setFatVariation(last_fat_data/penultimate_fat_data - 1);
             if (last_fat_data > penultimate_fat_data){
                 if (last_fat_data/penultimate_fat_data <= 1.15){
                     variationFatPayment = 0.0f;
@@ -281,6 +340,7 @@ public class SummaryService {
         else{
             float last_total_solids_data = summary.getFileUploadsType2().get(last_file).getTotal_solids();
             float penultimate_total_solids_data = summary.getFileUploadsType2().get(penultimate_file).getTotal_solids();
+            summary.setTotalSolidsVariation(last_total_solids_data/penultimate_total_solids_data - 1);
             if (last_total_solids_data > penultimate_total_solids_data){
                 if (last_total_solids_data/penultimate_total_solids_data <= 1.06){
                     variationTotalSolidsPayment = 0.0f;
@@ -297,6 +357,45 @@ public class SummaryService {
             }
         }
         return variationTotalSolidsPayment;
+    }
+
+    public int calculateDays(SummaryModel summary){
+        int days = 0;
+        
+        if (summary.getFileUploads().size() == 0){
+            return days;
+        }
+        else{
+            for(int i = 0; i < summary.getFileUploads().size(); i++){
+                for(int j = 0; j < summary.getFileUploads().size(); j++){
+                    if(!summary.getFileUploads().get(i).getDate().equals(summary.getFileUploads().get(j).getDate())){
+                        days++;
+                    }
+                }
+            }
+        }
+        return days;
+    }
+
+    public float calculateAvgDailyMilk(SummaryModel summary){
+        float avgDailyMilk = 0;
+        int days = calculateDays(summary);
+        if (days == 0){
+            return avgDailyMilk;
+        }
+        else{
+            for (int i = 0; i < summary.getFileUploads().size(); i++){
+                avgDailyMilk += summary.getFileUploads().get(i).getKgs_milk();
+            }
+            avgDailyMilk = avgDailyMilk/days;
+        }
+        return avgDailyMilk;
+    }
+
+    public float sumVariations(float shiftPayment, float discountKgsPayment, float discountFatPayment, float discountTotalSolidsPayment) {
+        float sumVariations = shiftPayment + discountKgsPayment + discountFatPayment + discountTotalSolidsPayment;
+
+        return sumVariations;
     }
 
     public float discountRetention(float payment) {

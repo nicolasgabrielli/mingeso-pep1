@@ -19,7 +19,7 @@ public class SupplierService {
         return supplierRepository.findById(id).orElse(null);
     }
 
-    public void createSupplier(String name, String code, String category, String retention) {
+    public void createSupplier(String name, int code, String category, String retention) {
         SupplierEntity supplier = new SupplierEntity();
         supplier.setName(name);
         supplier.setCode(code);

@@ -21,7 +21,7 @@ public class FileUploadEntity {
 
     private String date;
     private String shift;
-    private String supplier;
+    private int supplier;
     private int kgs_milk;
 
 }
