@@ -16,6 +16,7 @@ public class SummaryModel {
     private int supplierCode;
     private String supplierCategory;
     private String supplierName;
+    private Boolean supplierRetention;
     private ArrayList<FileUploadEntity> fileUploads;
     private ArrayList<FileUploadEntityType2> fileUploadsType2;
 
@@ -28,7 +29,7 @@ public class SummaryModel {
     private float discountKgsPayment;
     private float discountFatPayment;
     private float discountTotalSolidsPayment;
-    private float discountRetention;
+    private float taxRetention;
     private float totalPayment;
     private float finalPayment;
 

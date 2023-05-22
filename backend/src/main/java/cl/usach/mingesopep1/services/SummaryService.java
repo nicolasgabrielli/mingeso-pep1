@@ -56,6 +56,12 @@ public class SummaryService {
             summary.setSupplierCode(suppliers.get(i).getCode());
             summary.setSupplierCategory(suppliers.get(i).getCategory());
             summary.setSupplierName(suppliers.get(i).getName());
+            if(suppliers.get(i).getRetention() == "Sí"){
+                summary.setSupplierRetention(true);
+            }
+            else{
+                summary.setSupplierRetention(false);
+            }
             summary.setFileUploads(new ArrayList<FileUploadEntity>());
             summary.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
             for (int j = 0; j < fileUploads.size(); j++){
@@ -76,14 +82,19 @@ public class SummaryService {
     }
 
     public SummaryModel calculateSummaryModel(SummaryModel summary) {
-        
+
         int last_file = summary.getFileUploads().size() - 1;
         int last_file_type2 = summary.getFileUploadsType2().size() - 1;
+        
+        if(summary.getFileUploads().size() == 0 || summary.getFileUploadsType2().size() == 0){
+            return null;
+        }
         
         // Getting the last row in the file table
         FileUploadEntity file = summary.getFileUploads().get(last_file);
         FileUploadEntityType2 file_type2 = summary.getFileUploadsType2().get(last_file_type2);
-        
+
+
         // Getting the kgs_milk from the last file uploaded
         int kgs_milk = file.getKgs_milk();
 
@@ -99,16 +110,19 @@ public class SummaryService {
         summary.setDiscountKgsPayment(discountKgsPayment(summary, payment));
         summary.setDiscountFatPayment(discountFatPayment(summary, payment));
         summary.setDiscountTotalSolidsPayment(discountTotalSolidsPayment(summary, payment));
-        payment = sumVariations(summary.getShiftPayment(), summary.getDiscountKgsPayment(), 
-            summary.getDiscountFatPayment(), summary.getDiscountTotalSolidsPayment()) + payment;
+        payment = payment - sumVariations(summary.getShiftPayment(), summary.getDiscountKgsPayment(), 
+            summary.getDiscountFatPayment(), summary.getDiscountTotalSolidsPayment());
         summary.setTotalPayment(payment);
-        summary.setDiscountRetention(discountRetention(payment));
-        summary.setFinalPayment(payment + summary.getDiscountRetention());
+        summary.setTaxRetention(payment + taxRetention(summary, payment));
+        summary.setFinalPayment(payment + summary.getTaxRetention());
 
         return summary;
     }
 
     public ArrayList<SummaryModel> calculateSummaries(ArrayList<SummaryModel> summaries) {
+        if (summaries == null) {
+            return null;
+        }
         for (int i = 0; i < summaries.size(); i++){
             summaries.set(i, calculateSummaryModel(summaries.get(i)));
         }
@@ -126,28 +140,30 @@ public class SummaryService {
                 summaryEntity = new SummaryEntity();
                 last_file = summaries.get(i).getFileUploads().size() - 1;
                 last_file_type2 = summaries.get(i).getFileUploadsType2().size() - 1;
-                summaryEntity.setDate(summaries.get(i).getFileUploads().get(last_file).getDate());
-                summaryEntity.setCode(summaries.get(i).getSupplierCode());
-                summaryEntity.setName(summaries.get(i).getSupplierName());
-                summaryEntity.setKgsMilk(summaries.get(i).getFileUploads().get(last_file).getKgs_milk());
-                summaryEntity.setDays(calculateDays(summaries.get(i)));
-                summaryEntity.setAvgDailyMilk(calculateAvgDailyMilk(summaries.get(i)));
-                summaryEntity.setMilkVariation(summaries.get(i).getMilkVariation());
-                summaryEntity.setFat(summaries.get(i).getFileUploadsType2().get(last_file_type2).getFat());
-                summaryEntity.setFatVariation(summaries.get(i).getFatVariation());
-                summaryEntity.setTotalSolids(summaries.get(i).getFileUploadsType2().get(last_file_type2).getTotal_solids());
-                summaryEntity.setTotalSolidsVariation(summaries.get(i).getTotalSolidsVariation());
-                summaryEntity.setMilkPayment(summaries.get(i).getCategoryPayment());
-                summaryEntity.setFatPayment(summaries.get(i).getFatPayment());
-                summaryEntity.setTotalSolidsPayment(summaries.get(i).getTotalSolidsPayment());
-                summaryEntity.setFrenquencyBonus(summaries.get(i).getShiftPayment());
-                summaryEntity.setMilkVarDiscount(summaries.get(i).getDiscountKgsPayment());
-                summaryEntity.setFatVarDiscount(summaries.get(i).getDiscountFatPayment());
-                summaryEntity.setStVarDiscount(summaries.get(i).getDiscountTotalSolidsPayment());
-                summaryEntity.setTotalPayment(summaries.get(i).getTotalPayment());
-                summaryEntity.setRetentionAmmount(summaries.get(i).getDiscountRetention());
-                summaryEntity.setFinalPayment(summaries.get(i).getFinalPayment());
-                summaryRepository.save(summaryEntity);
+                if(summaries.get(i) != null){
+                    summaryEntity.setDate(summaries.get(i).getFileUploads().get(last_file).getDate());
+                    summaryEntity.setCode(summaries.get(i).getSupplierCode());
+                    summaryEntity.setName(summaries.get(i).getSupplierName());
+                    summaryEntity.setKgsMilk(summaries.get(i).getFileUploads().get(last_file).getKgs_milk());
+                    summaryEntity.setDays(calculateDays(summaries.get(i)));
+                    summaryEntity.setAvgDailyMilk(calculateAvgDailyMilk(summaries.get(i)));
+                    summaryEntity.setMilkVariation(summaries.get(i).getMilkVariation());
+                    summaryEntity.setFat(summaries.get(i).getFileUploadsType2().get(last_file_type2).getFat());
+                    summaryEntity.setFatVariation(summaries.get(i).getFatVariation());
+                    summaryEntity.setTotalSolids(summaries.get(i).getFileUploadsType2().get(last_file_type2).getTotal_solids());
+                    summaryEntity.setTotalSolidsVariation(summaries.get(i).getTotalSolidsVariation());
+                    summaryEntity.setMilkPayment(summaries.get(i).getCategoryPayment());
+                    summaryEntity.setFatPayment(summaries.get(i).getFatPayment());
+                    summaryEntity.setTotalSolidsPayment(summaries.get(i).getTotalSolidsPayment());
+                    summaryEntity.setFrenquencyBonus(summaries.get(i).getShiftPayment());
+                    summaryEntity.setMilkVarDiscount(summaries.get(i).getDiscountKgsPayment());
+                    summaryEntity.setFatVarDiscount(summaries.get(i).getDiscountFatPayment());
+                    summaryEntity.setStVarDiscount(summaries.get(i).getDiscountTotalSolidsPayment());
+                    summaryEntity.setTotalPayment(summaries.get(i).getTotalPayment());
+                    summaryEntity.setRetentionAmmount(summaries.get(i).getTaxRetention());
+                    summaryEntity.setFinalPayment(summaries.get(i).getFinalPayment());
+                    summaryRepository.save(summaryEntity);
+                }
             }
         }
         else{
@@ -246,15 +262,20 @@ public class SummaryService {
             if (summary.getFileUploads().get(last_file).getDate().equals(summary.getFileUploads().get(penultimate_file).getDate())){
                 // Checking if the last file shift is different from the penultimate file shift
                 if (!summary.getFileUploads().get(last_file).getShift().equals(summary.getFileUploads().get(penultimate_file).getShift())){
-                    if (summary.getFileUploads().get(last_file).getShift().equals("M")
-                    || summary.getFileUploads().get(penultimate_file).getShift().equals("M")
-                    || summary.getFileUploads().get(last_file).getShift().equals("T")
-                    || summary.getFileUploads().get(penultimate_file).getShift().equals("T")){
-                        shiftBonus = 0.12f;
+                    if (summary.getFileUploads().get(last_file).getShift().equals("T") && summary.getFileUploads().get(penultimate_file).getShift().equals("M")){
+                        shiftBonus = 0.2f;
                     }
-                    else {  // Error Case
-                        shiftBonus = 0.0f;
+                    else if (summary.getFileUploads().get(last_file).getShift().equals("M") && summary.getFileUploads().get(penultimate_file).getShift().equals("T")){
+                        shiftBonus = 0.2f;
                     }
+                }
+            }
+            else{
+                if (summary.getFileUploads().get(last_file).getShift().equals("M")){
+                    shiftBonus = 0.12f;
+                }
+                else if (summary.getFileUploads().get(last_file).getShift().equals("T")){
+                    shiftBonus = 0.08f;
                 }
                 else {  // Error Case
                     shiftBonus = 0.0f;
@@ -270,31 +291,32 @@ public class SummaryService {
         int last_file = summary.getFileUploads().size() - 1;
         int penultimate_file = summary.getFileUploads().size() - 2;
 
-        if (last_file < 1){
+        if (summary.getFileUploads().size() <= 1){
             return variationKgsPayment;
         }
-        else{
-            if (!summary.getFileUploads().get(last_file).getDate().equals(summary.getFileUploads().get(penultimate_file).getDate())){
-                float last_kgs_milk = summary.getFileUploads().get(last_file).getKgs_milk();
-                float penultimate_kgs_milk = summary.getFileUploads().get(penultimate_file).getKgs_milk();
-                summary.setMilkVariation(last_kgs_milk/penultimate_kgs_milk - 1);
-                if (last_kgs_milk > penultimate_kgs_milk){
-                    if (last_kgs_milk/penultimate_kgs_milk <= 1.08){
-                        variationKgsPayment = 0.0f;
-                    }
-                    else if (last_kgs_milk/penultimate_kgs_milk >= 1.09 && last_kgs_milk/penultimate_kgs_milk <= 1.25){
-                        variationKgsPayment = 0.07f;
-                    }
-                    else if (last_kgs_milk/penultimate_kgs_milk >= 1.26 && last_kgs_milk/penultimate_kgs_milk <= 1.45){
-                        variationKgsPayment = 0.15f;
-                    }
-                    else if (last_kgs_milk/penultimate_kgs_milk >= 1.46){
-                        variationKgsPayment = 0.3f;
-                    }
+        else {
+            if (summary.getFileUploads().get(last_file).getDate().equals(summary.getFileUploads().get(penultimate_file).getDate()) && summary.getFileUploads().size() > 2){
+                penultimate_file--;
+            }
+            float last_kgs_milk = summary.getFileUploads().get(last_file).getKgs_milk();
+            float penultimate_kgs_milk = summary.getFileUploads().get(penultimate_file).getKgs_milk();
+            summary.setMilkVariation((last_kgs_milk/penultimate_kgs_milk - 1) * 100);
+            if (last_kgs_milk > penultimate_kgs_milk){
+                if (last_kgs_milk/penultimate_kgs_milk <= 1.08){
+                    variationKgsPayment = 0.0f;
+                }
+                else if (last_kgs_milk/penultimate_kgs_milk >= 1.09 && last_kgs_milk/penultimate_kgs_milk <= 1.25){
+                    variationKgsPayment = 0.07f;
+                }
+                else if (last_kgs_milk/penultimate_kgs_milk >= 1.26 && last_kgs_milk/penultimate_kgs_milk <= 1.45){
+                    variationKgsPayment = 0.15f;
+                }
+                else if (last_kgs_milk/penultimate_kgs_milk >= 1.46){
+                    variationKgsPayment = 0.3f;
                 }
             }
         }
-        return variationKgsPayment;
+        return variationKgsPayment * payment;
     }
 
     public float discountFatPayment(SummaryModel summary, float payment) {
@@ -309,7 +331,7 @@ public class SummaryService {
         else{
             float last_fat_data = summary.getFileUploadsType2().get(last_file).getFat();
             float penultimate_fat_data = summary.getFileUploadsType2().get(penultimate_file).getFat();
-            summary.setFatVariation(last_fat_data/penultimate_fat_data - 1);
+            summary.setFatVariation((last_fat_data/penultimate_fat_data - 1) * 100);
             if (last_fat_data > penultimate_fat_data){
                 if (last_fat_data/penultimate_fat_data <= 1.15){
                     variationFatPayment = 0.0f;
@@ -325,7 +347,7 @@ public class SummaryService {
                 }
             }
         }
-        return variationFatPayment;
+        return variationFatPayment * payment;
     }
 
     public float discountTotalSolidsPayment(SummaryModel summary, float payment) {
@@ -340,7 +362,7 @@ public class SummaryService {
         else{
             float last_total_solids_data = summary.getFileUploadsType2().get(last_file).getTotal_solids();
             float penultimate_total_solids_data = summary.getFileUploadsType2().get(penultimate_file).getTotal_solids();
-            summary.setTotalSolidsVariation(last_total_solids_data/penultimate_total_solids_data - 1);
+            summary.setTotalSolidsVariation((last_total_solids_data/penultimate_total_solids_data - 1) * 100);
             if (last_total_solids_data > penultimate_total_solids_data){
                 if (last_total_solids_data/penultimate_total_solids_data <= 1.06){
                     variationTotalSolidsPayment = 0.0f;
@@ -356,7 +378,7 @@ public class SummaryService {
                 }
             }
         }
-        return variationTotalSolidsPayment;
+        return variationTotalSolidsPayment * payment;
     }
 
     public int calculateDays(SummaryModel summary){
@@ -398,17 +420,11 @@ public class SummaryService {
         return sumVariations;
     }
 
-    public float discountRetention(float payment) {
-        if (payment >= 950000){
+    public float taxRetention(SummaryModel summary, float payment) {
+        if (payment >= 950000 && summary.getSupplierRetention() == true){
             return payment * retentionTaxes;    
         }
         return 0.0f;
-    }
-
-    public float totalPayment(SummaryModel summary) {
-        float totalPayment = 0;
-
-        return totalPayment;
     }
 
 }

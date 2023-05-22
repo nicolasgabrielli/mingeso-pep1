@@ -77,11 +77,11 @@
                 <td th:text="${summary.kgsMilk}"></td>
                 <td th:text="${summary.days}"></td>
                 <td th:text="${summary.avgDailyMilk}"></td>
-                <td th:text="${summary.milkVariation}"></td>
-                <td th:text="${summary.fat}"></td>
-                <td th:text="${summary.fatVariation}"></td>
-                <td th:text="${summary.totalSolids}"></td>
-                <td th:text="${summary.totalSolidsVariation}"></td>
+                <td th:text="${summary.milkVariation} + '%'"></td>
+                <td th:text="${summary.fat} + '%'"></td>
+                <td th:text="${summary.fatVariation} + '%'"></td>
+                <td th:text="${summary.totalSolids} + '%'"></td>
+                <td th:text="${summary.totalSolidsVariation} + '%'"></td>
                 <td th:text="${summary.milkPayment}"></td>
                 <td th:text="${summary.fatPayment}"></td>
                 <td th:text="${summary.totalSolidsPayment}"></td>
