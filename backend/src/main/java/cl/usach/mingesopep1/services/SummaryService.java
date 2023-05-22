@@ -331,20 +331,19 @@ public class SummaryService {
         else{
             float last_fat_data = summary.getFileUploadsType2().get(last_file).getFat();
             float penultimate_fat_data = summary.getFileUploadsType2().get(penultimate_file).getFat();
-            summary.setFatVariation((last_fat_data/penultimate_fat_data - 1) * 100);
-            if (last_fat_data > penultimate_fat_data){
-                if (last_fat_data/penultimate_fat_data <= 1.15){
-                    variationFatPayment = 0.0f;
-                }
-                else if (last_fat_data/penultimate_fat_data >= 1.16 && last_fat_data/penultimate_fat_data <= 1.25){
-                    variationFatPayment = 0.12f;
-                }
-                else if (last_fat_data/penultimate_fat_data >= 1.26 && last_fat_data/penultimate_fat_data <= 1.40){
-                    variationFatPayment = 0.2f;
-                }
-                else if (last_fat_data/penultimate_fat_data >= 1.41){
-                    variationFatPayment = 0.3f;
-                }
+            summary.setFatVariation((penultimate_fat_data/last_fat_data - 1) * 100);
+            
+            if (penultimate_fat_data/last_fat_data <= 1.15){
+                variationFatPayment = 0.0f;
+            }
+            else if (penultimate_fat_data/last_fat_data >= 1.16 && penultimate_fat_data/last_fat_data <= 1.25){
+                variationFatPayment = 0.12f;
+            }
+            else if (penultimate_fat_data/last_fat_data >= 1.26 && penultimate_fat_data/last_fat_data <= 1.40){
+                variationFatPayment = 0.2f;
+            }
+            else if (penultimate_fat_data/last_fat_data >= 1.41){
+                variationFatPayment = 0.3f;
             }
         }
         return variationFatPayment * payment;
@@ -383,14 +382,21 @@ public class SummaryService {
 
     public int calculateDays(SummaryModel summary){
         int days = 0;
+        ArrayList<String> dates = new ArrayList<String>();
         
-        if (summary.getFileUploads().size() == 0){
+        if (summary.getFileUploads().size() == 0 || summary.getFileUploads() == null){
             return days;
         }
         else{
-            for(int i = 0; i < summary.getFileUploads().size(); i++){
-                for(int j = 0; j < summary.getFileUploads().size(); j++){
-                    if(!summary.getFileUploads().get(i).getDate().equals(summary.getFileUploads().get(j).getDate())){
+            dates.add(summary.getFileUploads().get(0).getDate());
+            days++;
+            for(int i = 1; i < summary.getFileUploads().size(); i++){
+                for(int j = 0; j < dates.size(); j++){
+                    if (summary.getFileUploads().get(i).getDate().equals(dates.get(j))){
+                        break;
+                    }
+                    else if (j == dates.size() - 1){
+                        dates.add(summary.getFileUploads().get(i).getDate());
                         days++;
                     }
                 }
@@ -401,15 +407,14 @@ public class SummaryService {
 
     public float calculateAvgDailyMilk(SummaryModel summary){
         float avgDailyMilk = 0;
-        int days = calculateDays(summary);
-        if (days == 0){
+        if (summary.getFileUploads().size() == 0){
             return avgDailyMilk;
         }
         else{
             for (int i = 0; i < summary.getFileUploads().size(); i++){
-                avgDailyMilk += summary.getFileUploads().get(i).getKgs_milk();
+                avgDailyMilk += summary.getFileUploads().get(i).getKgs_milk();        
             }
-            avgDailyMilk = avgDailyMilk/days;
+            avgDailyMilk = avgDailyMilk/summary.getFileUploads().size();
         }
         return avgDailyMilk;
     }

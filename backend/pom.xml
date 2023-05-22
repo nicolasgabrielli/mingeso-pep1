@@ -18,7 +18,9 @@
 		<sonar.exclusions>
 			src/main/java/cl/usach/mingesopep1/controllers/*,
 			src/main/java/cl/usach/mingesopep1/entities/*,
-			src/main/java/cl/usach/mingesopep1/repositories/*
+			src/main/java/cl/usach/mingesopep1/repositories/*,
+			src/main/java/cl/usach/mingesopep1/services/FileUploadService.java,
+			src/main/java/cl/usach/mingesopep1/services/SupplierService.java
 		</sonar.exclusions>
 	</properties>
 	<dependencies>

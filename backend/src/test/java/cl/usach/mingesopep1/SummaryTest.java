@@ -1,6 +1,5 @@
 package cl.usach.mingesopep1;
 
-import org.checkerframework.checker.units.qual.s;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -445,6 +444,501 @@ public class SummaryTest {
 
     @Test
     public void testDiscountFatPayment1(){
+        float payment = 100.0f;
+
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(true);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        FileUploadEntity fileUploadEntity = new FileUploadEntity();
+        fileUploadEntity.setDate("18-03-2023");
+        fileUploadEntity.setShift("T");
+        fileUploadEntity.setSupplier(1025);
+        fileUploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(fileUploadEntity);
+
+        FileUploadEntityType2 file1UploadEntityType2 = new FileUploadEntityType2();
+        file1UploadEntityType2.setSupplier(1025);
+        file1UploadEntityType2.setFat(30.0f);
+        file1UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file1UploadEntityType2);
         
+        float discountFatPayment = summaryService.discountFatPayment(summaryModel, payment);
+
+        assertEquals(0.0f, (float)((int)(discountFatPayment *1000f))/1000f);
+    }
+
+    @Test
+    public void testDiscountFatPayment2(){
+        float payment = 100.0f;
+
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(true);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        FileUploadEntity fileUploadEntity = new FileUploadEntity();
+        fileUploadEntity.setDate("18-03-2023");
+        fileUploadEntity.setShift("T");
+        fileUploadEntity.setSupplier(1025);
+        fileUploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(fileUploadEntity);
+
+        FileUploadEntityType2 file1UploadEntityType2 = new FileUploadEntityType2();
+        file1UploadEntityType2.setSupplier(1025);
+        file1UploadEntityType2.setFat(30.0f);
+        file1UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file1UploadEntityType2);
+        
+        FileUploadEntityType2 file2UploadEntityType2 = new FileUploadEntityType2();
+        file2UploadEntityType2.setSupplier(1025);
+        file2UploadEntityType2.setFat(30.0f);
+        file2UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file2UploadEntityType2);
+
+        float discountFatPayment = summaryService.discountFatPayment(summaryModel, payment);
+
+        assertEquals(0.0f, (float)((int)(discountFatPayment *1000f))/1000f);
+    }
+
+    @Test
+    public void testDiscountFatPayment3(){
+        float payment = 100.0f;
+
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(true);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        FileUploadEntity fileUploadEntity = new FileUploadEntity();
+        fileUploadEntity.setDate("18-03-2023");
+        fileUploadEntity.setShift("T");
+        fileUploadEntity.setSupplier(1025);
+        fileUploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(fileUploadEntity);
+
+        FileUploadEntityType2 file1UploadEntityType2 = new FileUploadEntityType2();
+        file1UploadEntityType2.setSupplier(1025);
+        file1UploadEntityType2.setFat(40.0f);
+        file1UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file1UploadEntityType2);
+        
+        FileUploadEntityType2 file2UploadEntityType2 = new FileUploadEntityType2();
+        file2UploadEntityType2.setSupplier(1025);
+        file2UploadEntityType2.setFat(30.0f);
+        file2UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file2UploadEntityType2);
+
+        float discountFatPayment = summaryService.discountFatPayment(summaryModel, payment);
+
+        assertEquals(20.0f, (float)((int)(discountFatPayment *1000f))/1000f);
+    }
+
+    @Test
+    public void testDiscountTotalSolidsPayment1(){
+        float payment = 100.0f;
+
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(true);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        FileUploadEntity fileUploadEntity = new FileUploadEntity();
+        fileUploadEntity.setDate("18-03-2023");
+        fileUploadEntity.setShift("T");
+        fileUploadEntity.setSupplier(1025);
+        fileUploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(fileUploadEntity);
+
+        FileUploadEntityType2 file1UploadEntityType2 = new FileUploadEntityType2();
+        file1UploadEntityType2.setSupplier(1025);
+        file1UploadEntityType2.setFat(30.0f);
+        file1UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file1UploadEntityType2);
+        
+        float discountTotalSolidsPayment = summaryService.discountTotalSolidsPayment(summaryModel, payment);
+
+        assertEquals(0.0f, (float)((int)(discountTotalSolidsPayment *1000f))/1000f);
+    }
+
+    @Test
+    public void testDiscountTotalSolidsPayment2(){
+        float payment = 100.0f;
+
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(true);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        FileUploadEntity fileUploadEntity = new FileUploadEntity();
+        fileUploadEntity.setDate("18-03-2023");
+        fileUploadEntity.setShift("T");
+        fileUploadEntity.setSupplier(1025);
+        fileUploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(fileUploadEntity);
+
+        FileUploadEntityType2 file1UploadEntityType2 = new FileUploadEntityType2();
+        file1UploadEntityType2.setSupplier(1025);
+        file1UploadEntityType2.setFat(30.0f);
+        file1UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file1UploadEntityType2);
+        
+        FileUploadEntityType2 file2UploadEntityType2 = new FileUploadEntityType2();
+        file2UploadEntityType2.setSupplier(1025);
+        file2UploadEntityType2.setFat(30.0f);
+        file2UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file2UploadEntityType2);
+
+        float discountTotalSolidsPayment = summaryService.discountTotalSolidsPayment(summaryModel, payment);
+
+        assertEquals(0.0f, (float)((int)(discountTotalSolidsPayment *1000f))/1000f);
+    }
+
+    @Test
+    public void testDiscountTotalSolidsPayment3(){
+        float payment = 100.0f;
+
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(true);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        FileUploadEntity fileUploadEntity = new FileUploadEntity();
+        fileUploadEntity.setDate("18-03-2023");
+        fileUploadEntity.setShift("T");
+        fileUploadEntity.setSupplier(1025);
+        fileUploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(fileUploadEntity);
+
+        FileUploadEntityType2 file1UploadEntityType2 = new FileUploadEntityType2();
+        file1UploadEntityType2.setSupplier(1025);
+        file1UploadEntityType2.setFat(30.0f);
+        file1UploadEntityType2.setTotal_solids(40.0f);
+        summaryModel.getFileUploadsType2().add(file1UploadEntityType2);
+        
+        FileUploadEntityType2 file2UploadEntityType2 = new FileUploadEntityType2();
+        file2UploadEntityType2.setSupplier(1025);
+        file2UploadEntityType2.setFat(30.0f);
+        file2UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file2UploadEntityType2);
+
+        float discountTotalSolidsPayment = summaryService.discountTotalSolidsPayment(summaryModel, payment);
+
+        assertEquals(27.0f, (float)((int)(discountTotalSolidsPayment *1000f))/1000f);
+    }
+
+    @Test
+    public void testCalculateDays1(){
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(true);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        FileUploadEntity fileUploadEntity = new FileUploadEntity();
+        fileUploadEntity.setDate("18-03-2023");
+        fileUploadEntity.setShift("T");
+        fileUploadEntity.setSupplier(1025);
+        fileUploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(fileUploadEntity);
+
+        FileUploadEntityType2 file1UploadEntityType2 = new FileUploadEntityType2();
+        file1UploadEntityType2.setSupplier(1025);
+        file1UploadEntityType2.setFat(30.0f);
+        file1UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file1UploadEntityType2);
+
+        int days = summaryService.calculateDays(summaryModel);
+
+        assertEquals(1, days);
+    }
+
+    @Test
+    public void testCalculateDays2(){
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(true);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        FileUploadEntity file1UploadEntity = new FileUploadEntity();
+        file1UploadEntity.setDate("18-03-2023");
+        file1UploadEntity.setShift("T");
+        file1UploadEntity.setSupplier(1025);
+        file1UploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(file1UploadEntity);
+
+        FileUploadEntity file2UploadEntity = new FileUploadEntity();
+        file2UploadEntity.setDate("19-03-2023");
+        file2UploadEntity.setShift("T");
+        file2UploadEntity.setSupplier(1025);
+        file2UploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(file2UploadEntity);
+
+        FileUploadEntity file3UploadEntity = new FileUploadEntity();
+        file3UploadEntity.setDate("20-03-2023");
+        file3UploadEntity.setShift("T");
+        file3UploadEntity.setSupplier(1025);
+        file3UploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(file3UploadEntity);
+
+        FileUploadEntityType2 file1UploadEntityType2 = new FileUploadEntityType2();
+        file1UploadEntityType2.setSupplier(1025);
+        file1UploadEntityType2.setFat(30.0f);
+        file1UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file1UploadEntityType2);
+
+        int days = summaryService.calculateDays(summaryModel);
+
+        assertEquals(3, days);
+    }
+
+    @Test
+    public void testCalculateDays3(){
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(true);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        int days = summaryService.calculateDays(summaryModel);
+
+        assertEquals(0, days);
+    }
+
+    @Test
+    public void testCalculateDays4(){
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(true);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        FileUploadEntity file1UploadEntity = new FileUploadEntity();
+        file1UploadEntity.setDate("19-03-2023");
+        file1UploadEntity.setShift("M");
+        file1UploadEntity.setSupplier(1025);
+        file1UploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(file1UploadEntity);
+
+        FileUploadEntity file2UploadEntity = new FileUploadEntity();
+        file2UploadEntity.setDate("19-03-2023");
+        file2UploadEntity.setShift("T");
+        file2UploadEntity.setSupplier(1025);
+        file2UploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(file2UploadEntity);
+
+        FileUploadEntity file3UploadEntity = new FileUploadEntity();
+        file3UploadEntity.setDate("20-03-2023");
+        file3UploadEntity.setShift("M");
+        file3UploadEntity.setSupplier(1025);
+        file3UploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(file3UploadEntity);
+
+        FileUploadEntity file4UploadEntity = new FileUploadEntity();
+        file4UploadEntity.setDate("20-03-2023");
+        file4UploadEntity.setShift("T");
+        file4UploadEntity.setSupplier(1025);
+        file4UploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(file4UploadEntity);
+
+        FileUploadEntityType2 file1UploadEntityType2 = new FileUploadEntityType2();
+        file1UploadEntityType2.setSupplier(1025);
+        file1UploadEntityType2.setFat(30.0f);
+        file1UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file1UploadEntityType2);
+
+        int days = summaryService.calculateDays(summaryModel);
+
+        assertEquals(2, days);
+    }
+
+    @Test
+    public void testCalculateAvgDailyMilk1(){
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(true);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        FileUploadEntity fileUploadEntity = new FileUploadEntity();
+        fileUploadEntity.setDate("18-03-2023");
+        fileUploadEntity.setShift("T");
+        fileUploadEntity.setSupplier(1025);
+        fileUploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(fileUploadEntity);
+
+        FileUploadEntityType2 file1UploadEntityType2 = new FileUploadEntityType2();
+        file1UploadEntityType2.setSupplier(1025);
+        file1UploadEntityType2.setFat(30.0f);
+        file1UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file1UploadEntityType2);
+
+        float avgDailyMilk = summaryService.calculateAvgDailyMilk(summaryModel);
+
+        assertEquals(35.0f, avgDailyMilk);
+    }
+
+    @Test
+    public void testCalculateAvgDailyMilk2(){
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(true);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        float avgDailyMilk = summaryService.calculateAvgDailyMilk(summaryModel);
+
+        assertEquals(0.0f, avgDailyMilk);
+    }
+    
+    @Test
+    public void testCalculateAvgDailyMilk3(){
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(true);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        FileUploadEntity file1UploadEntity = new FileUploadEntity();
+        file1UploadEntity.setDate("18-03-2023");
+        file1UploadEntity.setShift("M");
+        file1UploadEntity.setSupplier(1025);
+        file1UploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(file1UploadEntity);
+
+        FileUploadEntity file2UploadEntity = new FileUploadEntity();
+        file2UploadEntity.setDate("18-03-2023");
+        file2UploadEntity.setShift("T");
+        file2UploadEntity.setSupplier(1025);
+        file2UploadEntity.setKgs_milk(70);
+        summaryModel.getFileUploads().add(file2UploadEntity);
+
+        FileUploadEntityType2 file1UploadEntityType2 = new FileUploadEntityType2();
+        file1UploadEntityType2.setSupplier(1025);
+        file1UploadEntityType2.setFat(30.0f);
+        file1UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file1UploadEntityType2);
+
+        float avgDailyMilk = summaryService.calculateAvgDailyMilk(summaryModel);
+
+        assertEquals(52.5f, avgDailyMilk);
+    }
+
+    @Test
+    public void testCalculateAvgDailyMilk4(){
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(true);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        FileUploadEntity file1UploadEntity = new FileUploadEntity();
+        file1UploadEntity.setDate("18-03-2023");
+        file1UploadEntity.setShift("M");
+        file1UploadEntity.setSupplier(1025);
+        file1UploadEntity.setKgs_milk(10);
+        summaryModel.getFileUploads().add(file1UploadEntity);
+
+        FileUploadEntity file2UploadEntity = new FileUploadEntity();
+        file2UploadEntity.setDate("18-03-2023");
+        file2UploadEntity.setShift("T");
+        file2UploadEntity.setSupplier(1025);
+        file2UploadEntity.setKgs_milk(20);
+        summaryModel.getFileUploads().add(file2UploadEntity);
+
+        FileUploadEntity file3UploadEntity = new FileUploadEntity();
+        file3UploadEntity.setDate("19-03-2023");
+        file3UploadEntity.setShift("M");
+        file3UploadEntity.setSupplier(1025);
+        file3UploadEntity.setKgs_milk(30);
+        summaryModel.getFileUploads().add(file3UploadEntity);
+
+        FileUploadEntityType2 file1UploadEntityType2 = new FileUploadEntityType2();
+        file1UploadEntityType2.setSupplier(1025);
+        file1UploadEntityType2.setFat(30.0f);
+        file1UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file1UploadEntityType2);
+
+        float avgDailyMilk = summaryService.calculateAvgDailyMilk(summaryModel);
+
+        assertEquals(20.0f, avgDailyMilk);
+    }
+
+    @Test
+    public void testSumVariations(){
+        float shiftPayment = 1.0f;
+        float discountKgsPayment = 2.0f;
+        float discountFatPayment = 3.0f;
+        float discountTotalSolidsPayment = 4.0f;
+
+        float sumVariations = summaryService.sumVariations(shiftPayment, discountKgsPayment, discountFatPayment, discountTotalSolidsPayment);
+
+        assertEquals(10.0f, sumVariations);
+    }
+
+    @Test
+    public void testTaxRetention(){
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(false);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        FileUploadEntity fileUploadEntity = new FileUploadEntity();
+        fileUploadEntity.setDate("18-03-2023");
+        fileUploadEntity.setShift("T");
+        fileUploadEntity.setSupplier(1025);
+        fileUploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(fileUploadEntity);
+
+        FileUploadEntityType2 file1UploadEntityType2 = new FileUploadEntityType2();
+        file1UploadEntityType2.setSupplier(1025);
+        file1UploadEntityType2.setFat(30.0f);
+        file1UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file1UploadEntityType2);
+
+        float payment = 1000000.0f;
+        
+        float taxRetention = summaryService.taxRetention(summaryModel, payment);
+
+        assertEquals(0.0f, taxRetention);
     }
 }
