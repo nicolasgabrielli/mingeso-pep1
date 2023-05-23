@@ -1,1 +1,7 @@
+Notebook
+
 mvn clean verify sonar:sonar -Dsonar.projectKey=pep1 -Dsonar.host.url=http://localhost:9000 -Dsonar.login=sqp_66d1255047c7afda8cb6a56c867bdaad93cfd530
+
+PC
+
+mvn clean verify sonar:sonar -Dsonar.projectKey=pep1-mingeso -Dsonar.host.url=http://localhost:9000 -Dsonar.login=sqp_1d64082734223ed3b5d4f5bc8d81c19b410cb42d

@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import java.util.ArrayList;
 
 @SpringBootTest
-public class SummaryTest {
+class SummaryTest {
     @Autowired
     private SummaryService summaryService;
 

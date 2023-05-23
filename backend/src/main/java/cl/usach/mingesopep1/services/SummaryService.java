@@ -56,7 +56,7 @@ public class SummaryService {
             summary.setSupplierCode(suppliers.get(i).getCode());
             summary.setSupplierCategory(suppliers.get(i).getCategory());
             summary.setSupplierName(suppliers.get(i).getName());
-            if(suppliers.get(i).getRetention() == "Sí"){
+            if(suppliers.get(i).getRetention().equals("Sí")){
                 summary.setSupplierRetention(true);
             }
             else{
@@ -180,16 +180,16 @@ public class SummaryService {
     public float categoryPayment(int kgs_milk, String category) {
         float categoryPayment;
         if (category.equals("A")){
-            categoryPayment = kgs_milk * 700;
+            categoryPayment = (float) kgs_milk * 700;
         }
         else if (category.equals("B")){
-            categoryPayment = kgs_milk * 550;
+            categoryPayment = (float) kgs_milk * 550;
         }
         else if (category.equals("C")){
-            categoryPayment = kgs_milk * 400;
+            categoryPayment = (float) kgs_milk * 400;
         }
         else if (category.equals("D")){
-            categoryPayment = kgs_milk * 250;
+            categoryPayment = (float) kgs_milk * 250;
         }        
         else {      // Error Case
             categoryPayment = 0;
@@ -200,13 +200,13 @@ public class SummaryService {
     public float fatPayment(int kgs_milk, float fat) {
         float fatPayment;
         if (fat >= 0 && fat <= 20){
-            fatPayment = kgs_milk * 30;
+            fatPayment = (float) kgs_milk * 30;
         }
         else if (fat >= 21 && fat <= 45){
-            fatPayment = kgs_milk * 80;
+            fatPayment = (float) kgs_milk * 80;
         }
         else if (fat >= 46) {
-            fatPayment = kgs_milk * 120;
+            fatPayment = (float) kgs_milk * 120;
         }
         else {      // Error Case
             fatPayment = 0;
@@ -217,16 +217,16 @@ public class SummaryService {
     public float totalSolidsPayment(int kgs_milk, float total_solids) {
         float totalSolidsPayment;
         if (total_solids >= 0 && total_solids <= 7){
-            totalSolidsPayment = kgs_milk * -130;
+            totalSolidsPayment = (float) kgs_milk * -130;
         }
         else if (total_solids >= 8 && total_solids <= 18){
-            totalSolidsPayment = kgs_milk * -90;
+            totalSolidsPayment = (float) kgs_milk * -90;
         }
         else if (total_solids >= 19 && total_solids <= 35) {
-            totalSolidsPayment = kgs_milk * 95;
+            totalSolidsPayment = (float) kgs_milk * 95;
         }
         else if (total_solids >= 36) {
-            totalSolidsPayment = kgs_milk * 150;
+            totalSolidsPayment = (float) kgs_milk * 150;
         }
         else {      // Error Case
             totalSolidsPayment = 0;
