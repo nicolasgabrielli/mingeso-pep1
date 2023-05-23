@@ -19,8 +19,10 @@
 			src/main/java/cl/usach/mingesopep1/controllers/*,
 			src/main/java/cl/usach/mingesopep1/entities/*,
 			src/main/java/cl/usach/mingesopep1/repositories/*,
+			src/main/java/cl/usach/mingesopep1/models/*,
 			src/main/java/cl/usach/mingesopep1/services/FileUploadService.java,
-			src/main/java/cl/usach/mingesopep1/services/SupplierService.java
+			src/main/java/cl/usach/mingesopep1/services/SupplierService.java,
+			src/main/java/cl/usach/mingesopep1/MingesoPep1Application.java
 		</sonar.exclusions>
 	</properties>
 	<dependencies>

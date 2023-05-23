@@ -426,7 +426,7 @@ public class SummaryService {
     }
 
     public float taxRetention(SummaryModel summary, float payment) {
-        if (payment >= 950000 && summary.getSupplierRetention() == true){
+        if (payment >= 950000 && summary.getSupplierRetention()){
             return payment * retentionTaxes;    
         }
         return 0.0f;

@@ -148,6 +148,36 @@ class SummaryTest {
     }
 
     @Test
+    public void testCategoryPayment3(){
+        int kgs_milk = 100;
+        String category = "A";
+
+        float categoryPayment = summaryService.categoryPayment(kgs_milk, category);
+
+        assertEquals(70000.0f, categoryPayment);
+    }
+
+    @Test
+    public void testCategoryPayment4(){
+        int kgs_milk = 100;
+        String category = "B";
+
+        float categoryPayment = summaryService.categoryPayment(kgs_milk, category);
+
+        assertEquals(55000.0f, categoryPayment);
+    }
+
+    @Test
+    public void testCategoryPayment5(){
+        int kgs_milk = 100;
+        String category = "C";
+
+        float categoryPayment = summaryService.categoryPayment(kgs_milk, category);
+
+        assertEquals(40000.0f, categoryPayment);
+    }
+
+    @Test
     public void testFatPayment1(){
         int kgs_milk = 100;
         float fat = 22.0f;
@@ -165,6 +195,26 @@ class SummaryTest {
         float fatPayment = summaryService.fatPayment(kgs_milk, fat);
 
         assertEquals(0.0f, fatPayment);
+    }
+
+    @Test
+    public void testFatPayment3(){
+        int kgs_milk = 100;
+        float fat = 17.0f;
+
+        float fatPayment = summaryService.fatPayment(kgs_milk, fat);
+
+        assertEquals(3000.0f, fatPayment);
+    }
+
+    @Test
+    public void testFatPayment4(){
+        int kgs_milk = 100;
+        float fat = 50.0f;
+
+        float fatPayment = summaryService.fatPayment(kgs_milk, fat);
+
+        assertEquals(12000.0f, fatPayment);
     }
 
     @Test
@@ -195,6 +245,26 @@ class SummaryTest {
         float totalSolidsPayment = summaryService.totalSolidsPayment(kgs_milk, total_solids);
 
         assertEquals(-13000.0f, totalSolidsPayment);
+    }
+
+    @Test
+    public void testTotalSolidsPayment4(){
+        int kgs_milk = 100;
+        float total_solids = 10.0f;
+
+        float totalSolidsPayment = summaryService.totalSolidsPayment(kgs_milk, total_solids);
+
+        assertEquals(-9000.0f, totalSolidsPayment);
+    }
+
+    @Test
+    public void testTotalSolidsPayment5(){
+        int kgs_milk = 100;
+        float total_solids = 20.0f;
+
+        float totalSolidsPayment = summaryService.totalSolidsPayment(kgs_milk, total_solids);
+
+        assertEquals(9500.0f, totalSolidsPayment);
     }
 
     @Test
@@ -354,7 +424,7 @@ class SummaryTest {
         fileUploadEntity2.setDate("18-03-2023");
         fileUploadEntity2.setShift("T");
         fileUploadEntity2.setSupplier(1025);
-        fileUploadEntity2.setKgs_milk(35);
+        fileUploadEntity2.setKgs_milk(36);
         summaryModel.getFileUploads().add(fileUploadEntity2);
 
         FileUploadEntityType2 fileUploadEntityType2 = new FileUploadEntityType2();
@@ -392,7 +462,7 @@ class SummaryTest {
         fileUploadEntity2.setDate("19-03-2023");
         fileUploadEntity2.setShift("T");
         fileUploadEntity2.setSupplier(1025);
-        fileUploadEntity2.setKgs_milk(35);
+        fileUploadEntity2.setKgs_milk(39);
         summaryModel.getFileUploads().add(fileUploadEntity2);
 
         FileUploadEntityType2 fileUploadEntityType2 = new FileUploadEntityType2();
@@ -403,7 +473,7 @@ class SummaryTest {
 
         float discountKgsPayment = summaryService.discountKgsPayment(summaryModel, payment);
 
-        assertEquals(0.0f, (float)((int)(discountKgsPayment *1000f))/1000f);
+        assertEquals(7.0f, (float)((int)(discountKgsPayment *1000f))/1000f);
     }
 
     @Test
@@ -440,6 +510,49 @@ class SummaryTest {
 
         float discountKgsPayment = summaryService.discountKgsPayment(summaryModel, payment);
         assertEquals(15.0f, (float)((int)(discountKgsPayment *1000f))/1000f);
+    }
+
+    @Test
+    public void testDiscountKgsPayment4(){
+        float payment = 100.0f;
+
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(true);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        FileUploadEntity fileUploadEntity1 = new FileUploadEntity();
+        fileUploadEntity1.setDate("18-03-2023");
+        fileUploadEntity1.setShift("M");
+        fileUploadEntity1.setSupplier(1025);
+        fileUploadEntity1.setKgs_milk(35);
+        summaryModel.getFileUploads().add(fileUploadEntity1);
+
+        FileUploadEntity fileUploadEntity2 = new FileUploadEntity();
+        fileUploadEntity2.setDate("19-03-2023");
+        fileUploadEntity2.setShift("M");
+        fileUploadEntity2.setSupplier(1025);
+        fileUploadEntity2.setKgs_milk(45);
+        summaryModel.getFileUploads().add(fileUploadEntity2);
+
+        FileUploadEntity fileUploadEntity3 = new FileUploadEntity();
+        fileUploadEntity3.setDate("19-03-2023");
+        fileUploadEntity3.setShift("T");
+        fileUploadEntity3.setSupplier(1025);
+        fileUploadEntity3.setKgs_milk(100);
+        summaryModel.getFileUploads().add(fileUploadEntity3);
+
+        FileUploadEntityType2 fileUploadEntityType2 = new FileUploadEntityType2();
+        fileUploadEntityType2.setSupplier(1025);
+        fileUploadEntityType2.setFat(30.0f);
+        fileUploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(fileUploadEntityType2);
+
+        float discountKgsPayment = summaryService.discountKgsPayment(summaryModel, payment);
+        assertEquals(30.0f, (float)((int)(discountKgsPayment *1000f))/1000f);
     }
 
     @Test
@@ -545,6 +658,42 @@ class SummaryTest {
     }
 
     @Test
+    public void testDiscountFatPayment4(){
+        float payment = 100.0f;
+
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(true);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        FileUploadEntity fileUploadEntity = new FileUploadEntity();
+        fileUploadEntity.setDate("18-03-2023");
+        fileUploadEntity.setShift("T");
+        fileUploadEntity.setSupplier(1025);
+        fileUploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(fileUploadEntity);
+
+        FileUploadEntityType2 file1UploadEntityType2 = new FileUploadEntityType2();
+        file1UploadEntityType2.setSupplier(1025);
+        file1UploadEntityType2.setFat(40.0f);
+        file1UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file1UploadEntityType2);
+        
+        FileUploadEntityType2 file2UploadEntityType2 = new FileUploadEntityType2();
+        file2UploadEntityType2.setSupplier(1025);
+        file2UploadEntityType2.setFat(10.0f);
+        file2UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file2UploadEntityType2);
+
+        float discountFatPayment = summaryService.discountFatPayment(summaryModel, payment);
+
+        assertEquals(30.0f, (float)((int)(discountFatPayment *1000f))/1000f);
+    }
+
+    @Test
     public void testDiscountTotalSolidsPayment1(){
         float payment = 100.0f;
 
@@ -602,7 +751,7 @@ class SummaryTest {
         FileUploadEntityType2 file2UploadEntityType2 = new FileUploadEntityType2();
         file2UploadEntityType2.setSupplier(1025);
         file2UploadEntityType2.setFat(30.0f);
-        file2UploadEntityType2.setTotal_solids(50.0f);
+        file2UploadEntityType2.setTotal_solids(51.0f);
         summaryModel.getFileUploadsType2().add(file2UploadEntityType2);
 
         float discountTotalSolidsPayment = summaryService.discountTotalSolidsPayment(summaryModel, payment);
@@ -913,7 +1062,7 @@ class SummaryTest {
     }
 
     @Test
-    public void testTaxRetention(){
+    public void testTaxRetention1(){
         SummaryModel summaryModel = new SummaryModel();
         summaryModel.setSupplierCode(1025);
         summaryModel.setSupplierCategory("A");
@@ -940,5 +1089,35 @@ class SummaryTest {
         float taxRetention = summaryService.taxRetention(summaryModel, payment);
 
         assertEquals(0.0f, taxRetention);
+    }
+
+    @Test
+    public void testTaxRetention2(){
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(true);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        FileUploadEntity fileUploadEntity = new FileUploadEntity();
+        fileUploadEntity.setDate("18-03-2023");
+        fileUploadEntity.setShift("T");
+        fileUploadEntity.setSupplier(1025);
+        fileUploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(fileUploadEntity);
+
+        FileUploadEntityType2 file1UploadEntityType2 = new FileUploadEntityType2();
+        file1UploadEntityType2.setSupplier(1025);
+        file1UploadEntityType2.setFat(30.0f);
+        file1UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file1UploadEntityType2);
+
+        float payment = 1000000.0f;
+        
+        float taxRetention = summaryService.taxRetention(summaryModel, payment);
+
+        assertEquals(payment*0.13f, taxRetention);
     }
 }
