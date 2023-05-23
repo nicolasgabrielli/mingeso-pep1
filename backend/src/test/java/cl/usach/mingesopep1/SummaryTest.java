@@ -1120,4 +1120,14 @@ class SummaryTest {
 
         assertEquals(payment*0.13f, taxRetention);
     }
+
+    @Test
+    public void testMakeSummary(){
+        makeSummary();
+    }
+
+    @Test
+    public void testCreateSummaryModels(){
+        ArrayList<SummaryModel> summaryModels = summaryService.createSummaryModels();
+    }
 }

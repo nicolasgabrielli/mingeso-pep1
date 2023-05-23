@@ -43,11 +43,6 @@ public class SummaryService {
         ArrayList<FileUploadEntity> fileUploads = new ArrayList<FileUploadEntity>(fileUploadsData);
         ArrayList<FileUploadEntityType2> fileUploadsType2 = new ArrayList<FileUploadEntityType2>(fileUploadsType2Data);
 
-        if (suppliers == null || fileUploads == null || fileUploadsType2 == null) {
-            System.out.println("Error: No data in database");
-            return null;
-        }
-
         ArrayList<SummaryModel> summaries = new ArrayList<SummaryModel>();
         SummaryModel summary;
         // Making a summary for each supplier
@@ -120,9 +115,6 @@ public class SummaryService {
     }
 
     public ArrayList<SummaryModel> calculateSummaries(ArrayList<SummaryModel> summaries) {
-        if (summaries == null) {
-            return null;
-        }
         for (int i = 0; i < summaries.size(); i++){
             summaries.set(i, calculateSummaryModel(summaries.get(i)));
         }
@@ -165,9 +157,6 @@ public class SummaryService {
                     summaryRepository.save(summaryEntity);
                 }
             }
-        }
-        else{
-            System.out.println("No hay datos para generar resumen");
         }
     }
 
