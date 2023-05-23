@@ -2,7 +2,7 @@ version: "3.8"
 services:
   app1:
     container_name: spring-boot-docker1
-    image: nicolasgabrielli/mingeso-pep1:api
+    image: nicolasgabrielli/mingeso-pep1
     ports:
       - "8091:8090"
     depends_on:
@@ -16,7 +16,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=postgresql
   app2:
     container_name: spring-boot-docker2
-    image: nicolasgabrielli/mingeso-pep1:api
+    image: nicolasgabrielli/mingeso-pep1
     ports:
       - "8092:8090"
     depends_on:
@@ -30,7 +30,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=postgresql
   app3:
     container_name: spring-boot-docker3
-    image: nicolasgabrielli/mingeso-pep1:api
+    image: nicolasgabrielli/mingeso-pep1
     ports:
       - "8093:8090"
     depends_on:

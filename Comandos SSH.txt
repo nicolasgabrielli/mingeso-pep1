@@ -1,0 +1,3 @@
+chmod 400 key.pem
+
+ssh -i key.pem ec2-user@54.213.75.139
