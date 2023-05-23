@@ -1123,7 +1123,7 @@ class SummaryTest {
 
     @Test
     public void testMakeSummary(){
-        makeSummary();
+        summaryService.makeSummary();
     }
 
     @Test
