@@ -702,6 +702,42 @@ class SummaryTest {
     }
 
     @Test
+    public void testDiscountFatPayment5(){
+        float payment = 100.0f;
+
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(true);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        FileUploadEntity fileUploadEntity = new FileUploadEntity();
+        fileUploadEntity.setDate("18-03-2023");
+        fileUploadEntity.setShift("T");
+        fileUploadEntity.setSupplier(1025);
+        fileUploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(fileUploadEntity);
+
+        FileUploadEntityType2 file1UploadEntityType2 = new FileUploadEntityType2();
+        file1UploadEntityType2.setSupplier(1025);
+        file1UploadEntityType2.setFat(40.0f);
+        file1UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file1UploadEntityType2);
+        
+        FileUploadEntityType2 file2UploadEntityType2 = new FileUploadEntityType2();
+        file2UploadEntityType2.setSupplier(1025);
+        file2UploadEntityType2.setFat(34.0f);
+        file2UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file2UploadEntityType2);
+
+        float discountFatPayment = summaryService.discountFatPayment(summaryModel, payment);
+
+        assertEquals(12.0f, (float)((int)(discountFatPayment *1000f))/1000f);
+    }
+
+    @Test
     public void testDiscountTotalSolidsPayment1(){
         float payment = 100.0f;
 
@@ -801,6 +837,78 @@ class SummaryTest {
         float discountTotalSolidsPayment = summaryService.discountTotalSolidsPayment(summaryModel, payment);
 
         assertEquals(27.0f, (float)((int)(discountTotalSolidsPayment *1000f))/1000f);
+    }
+
+    @Test
+    public void testDiscountTotalSolidsPayment4(){
+        float payment = 100.0f;
+
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(true);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        FileUploadEntity fileUploadEntity = new FileUploadEntity();
+        fileUploadEntity.setDate("18-03-2023");
+        fileUploadEntity.setShift("T");
+        fileUploadEntity.setSupplier(1025);
+        fileUploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(fileUploadEntity);
+
+        FileUploadEntityType2 file1UploadEntityType2 = new FileUploadEntityType2();
+        file1UploadEntityType2.setSupplier(1025);
+        file1UploadEntityType2.setFat(30.0f);
+        file1UploadEntityType2.setTotal_solids(45.0f);
+        summaryModel.getFileUploadsType2().add(file1UploadEntityType2);
+        
+        FileUploadEntityType2 file2UploadEntityType2 = new FileUploadEntityType2();
+        file2UploadEntityType2.setSupplier(1025);
+        file2UploadEntityType2.setFat(30.0f);
+        file2UploadEntityType2.setTotal_solids(50.0f);
+        summaryModel.getFileUploadsType2().add(file2UploadEntityType2);
+
+        float discountTotalSolidsPayment = summaryService.discountTotalSolidsPayment(summaryModel, payment);
+
+        assertEquals(18.0f, (float)((int)(discountTotalSolidsPayment *1000f))/1000f);
+    }
+
+    @Test
+    public void testDiscountTotalSolidsPayment5(){
+        float payment = 100.0f;
+
+        SummaryModel summaryModel = new SummaryModel();
+        summaryModel.setSupplierCode(1025);
+        summaryModel.setSupplierCategory("A");
+        summaryModel.setSupplierName("Nicolás Gabrielli");
+        summaryModel.setSupplierRetention(true);
+        summaryModel.setFileUploads(new ArrayList<FileUploadEntity>());
+        summaryModel.setFileUploadsType2(new ArrayList<FileUploadEntityType2>());
+
+        FileUploadEntity fileUploadEntity = new FileUploadEntity();
+        fileUploadEntity.setDate("18-03-2023");
+        fileUploadEntity.setShift("T");
+        fileUploadEntity.setSupplier(1025);
+        fileUploadEntity.setKgs_milk(35);
+        summaryModel.getFileUploads().add(fileUploadEntity);
+
+        FileUploadEntityType2 file1UploadEntityType2 = new FileUploadEntityType2();
+        file1UploadEntityType2.setSupplier(1025);
+        file1UploadEntityType2.setFat(30.0f);
+        file1UploadEntityType2.setTotal_solids(45.0f);
+        summaryModel.getFileUploadsType2().add(file1UploadEntityType2);
+        
+        FileUploadEntityType2 file2UploadEntityType2 = new FileUploadEntityType2();
+        file2UploadEntityType2.setSupplier(1025);
+        file2UploadEntityType2.setFat(30.0f);
+        file2UploadEntityType2.setTotal_solids(80.0f);
+        summaryModel.getFileUploadsType2().add(file2UploadEntityType2);
+
+        float discountTotalSolidsPayment = summaryService.discountTotalSolidsPayment(summaryModel, payment);
+
+        assertEquals(45.0f, (float)((int)(discountTotalSolidsPayment *1000f))/1000f);
     }
 
     @Test
