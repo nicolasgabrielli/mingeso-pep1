@@ -1238,7 +1238,7 @@ class SummaryTest {
     }
 
     @Test
-    public void testMakeSummary(){
+    public void testMakeSummary1(){
         supplierService.createSupplier("Nicolás Gabrielli", 1025, "A", "Sí");
         fileUploadService.createFileUpload("18-03-2023", "T", 1025, 35);
         fileUploadService.createFileUploadType2(1025, 30.0f, 50.0f);
@@ -1246,8 +1246,24 @@ class SummaryTest {
     }
 
     @Test
-    public void testCreateSummaryModels(){
+    public void testMakeSummary2(){
+        supplierService.createSupplier("Nicolás Gabrielli", 1025, "A", "No");
+        fileUploadService.createFileUpload("18-03-2023", "T", 1025, 35);
+        fileUploadService.createFileUploadType2(1025, 30.0f, 50.0f);
+        summaryService.makeSummary();
+    }
+
+    @Test
+    public void testCreateSummaryModels1(){
         supplierService.createSupplier("Nicolás Gabrielli", 1025, "A", "Sí");
+        fileUploadService.createFileUpload("18-03-2023", "T", 1025, 35);
+        fileUploadService.createFileUploadType2(1025, 30.0f, 50.0f);
+        ArrayList<SummaryModel> summaryModels = summaryService.createSummaryModels();
+    }
+
+    @Test
+    public void testCreateSummaryModels2(){
+        supplierService.createSupplier("Nicolás Gabrielli", 1025, "A", "No");
         fileUploadService.createFileUpload("18-03-2023", "T", 1025, 35);
         fileUploadService.createFileUploadType2(1025, 30.0f, 50.0f);
         ArrayList<SummaryModel> summaryModels = summaryService.createSummaryModels();
