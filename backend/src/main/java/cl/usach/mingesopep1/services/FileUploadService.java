@@ -107,5 +107,22 @@ public class FileUploadService {
     public List<FileUploadEntityType2> getAllFilesType2() {
         return fileUploadRepositoryType2.findAll();
     }
+
+    public void createFileUpload(String date, String shift, int supplier, int kgs_milk) {
+        FileUploadEntity fileUploadEntity = new FileUploadEntity();
+        fileUploadEntity.setDate(date);
+        fileUploadEntity.setShift(shift);
+        fileUploadEntity.setSupplier(supplier);
+        fileUploadEntity.setKgs_milk(kgs_milk);
+        fileUploadRepository.save(fileUploadEntity);
+    }
+
+    public void createFileUploadType2(int supplier, float fat, float total_solids) {
+        FileUploadEntityType2 fileUploadEntityType2 = new FileUploadEntityType2();
+        fileUploadEntityType2.setSupplier(supplier);
+        fileUploadEntityType2.setFat(fat);
+        fileUploadEntityType2.setTotal_solids(total_solids);
+        fileUploadRepositoryType2.save(fileUploadEntityType2);
+    }
     
 }

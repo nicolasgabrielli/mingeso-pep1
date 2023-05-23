@@ -6,6 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import cl.usach.mingesopep1.models.SummaryModel;
 import cl.usach.mingesopep1.services.SummaryService;
+import cl.usach.mingesopep1.services.SupplierService;
+import cl.usach.mingesopep1.services.FileUploadService;
 import cl.usach.mingesopep1.entities.FileUploadEntity;
 import cl.usach.mingesopep1.entities.FileUploadEntityType2;
 
@@ -18,6 +20,12 @@ import java.util.ArrayList;
 class SummaryTest {
     @Autowired
     private SummaryService summaryService;
+
+    @Autowired
+    private SupplierService supplierService;
+
+    @Autowired
+    private FileUploadService fileUploadService;
 
     // No files case.
     @Test
@@ -1123,11 +1131,17 @@ class SummaryTest {
 
     @Test
     public void testMakeSummary(){
+        supplierService.createSupplier("Nicolás Gabrielli", 1025, "A", "Sí");
+        fileUploadService.createFileUpload("18-03-2023", "T", 1025, 35);
+        fileUploadService.createFileUploadType2(1025, 30.0f, 50.0f);
         summaryService.makeSummary();
     }
 
     @Test
     public void testCreateSummaryModels(){
+        supplierService.createSupplier("Nicolás Gabrielli", 1025, "A", "Sí");
+        fileUploadService.createFileUpload("18-03-2023", "T", 1025, 35);
+        fileUploadService.createFileUploadType2(1025, 30.0f, 50.0f);
         ArrayList<SummaryModel> summaryModels = summaryService.createSummaryModels();
     }
 }
